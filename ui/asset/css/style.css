@@ -1,0 +1,128 @@
+/*NORMALIZE*/
+@-ms-viewport{
+    width: device-width;
+}
+html,body{
+   -webkit-text-size-adjust: 100%;
+    margin:0;
+    padding:0;
+    overflow-x: hidden;
+    overflow-y:auto;
+    height: auto;
+}
+a{
+    text-decoration: none;
+    cursor: pointer;
+}
+img{
+  display: block;
+  width: 100%;
+}
+ol,ul{
+    list-style: none;
+}
+a,p,h1,h2,h3,h4,h5,span{
+    font-family:"Metrophobic",Arial,sans-serif;
+}
+body{
+    position: fixed;
+    top:0;
+    left:0;
+    width: 100%;
+    height: 100%;
+    padding:0;
+    margin:0;
+    overflow-x: hidden;
+    white-space: nowrap;
+    background: #455A64;
+    text-align: center;
+}
+/*END OF NORMALIZE*/
+body:after{
+  content:'';
+  display: inline-block;
+  vertical-align: middle;
+  height: 100%;
+  width: 0;
+}
+#pokedex-wrapper{
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  width: 100%;
+  height: 100%;
+}
+#pokedex{
+  position: absolute;
+  top:0;
+  left:0;
+  width: 100%;
+  height: 100%;
+  text-align: left;
+  border-radius: 10%;
+}
+#pokedex-screen,
+#pokedex-control{
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  height:100%;
+  white-space: normal;
+  text-align: center;
+}
+#pokedex-screen{
+  background:red;
+  width: 30%;
+}
+#pokedex-screen>div{
+  height: 0;
+  overflow: hidden;
+}
+#pokedex-screen>div.active{
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+#pokedex-screen-summary{
+  position: relative;
+  white-space: nowrap;
+}
+#pokedex-summary-bg{
+  position: absolute;
+  top:0;
+  left:0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  background: purple;
+}
+#pokedex-screen-summary:after{
+  content:'';
+  display: inline-block;
+  vertical-align: middle;
+  width: 0;
+  height: 100%;
+}
+#pokedex-summary-wrapper{
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  width: 100%;
+  z-index: 2;
+}
+#pokedex-control{
+  width: 70%;
+  background:blue;
+}
+@media(max-width:800px){
+  #pokedex-screen,
+  #pokedex-control{
+    display: block;
+    height: 50%;
+    width: 100%;
+  }
+  #pokedex-summary-img{
+    width: 50%;
+    margin:0 auto;
+  }
+}
