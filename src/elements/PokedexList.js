@@ -1,17 +1,17 @@
 import React from 'react';
 import * as URL from '../constants/URL';
 import { connect } from 'react-redux';
-import { selectPokemonAction, addPokemonAction, getPokemonAction } from '../actions/pokeActions';
+import { selectPokemonAction, addPokemonAction, getPokemonAction, spriteErrorAction } from '../actions/pokeActions';
 import { toggleShowPopupAction } from '../actions/uiActions';
 import Waypoint from 'react-waypoint';
 
-const PokedexList = ({ pokemons, selectedPokemon, pagination, showPopup, onHandleSelectPokemon, onHandleGetPokemon, onHandleScrollEnd })=>(
-  <div id="pokedex-list-wrapper">
+const PokedexList = ({ pokemons, selectedPokemon, pagination, showPopup, onHandleSelectPokemon, onHandleGetPokemon, onHandleScrollEnd, onHandleSpriteError })=>(
+  <div id="pokedex-list-wrapper" className={showPopup ? " hidden": ""}>
     <ul id="pokedex-list">
       {pokemons.map((pokemon) =>(
         <li key={pokemon.id} className={"pokedex-list-item" + (selectedPokemon.id==pokemon.id ? " active" : "")} style={{opacity:1}}>
             <div className="pokedex-list-thumbnail">
-              <img src={pokemon.displaySprite ? pokemon.displaySprite : URL.POKEMON_SPRITES_NODATA_URL} alt=""/>
+              <img src={pokemon.displaySprite ? pokemon.displaySprite : URL.POKEMON_SPRITES_NODATA_URL} onError={onHandleSpriteError.bind(this, pokemon)} alt=""/>
             </div>
             <div className="pokedex-list-info-wrapper">
               <p className="pokedex-list-info-number">{pokemon.id}</p>
@@ -44,7 +44,6 @@ const mapStateToProps = ({ pokemons, ui }) => ({
   showPopup: ui.showPopup,
 });
 
-
 const mapDispatchToProps = (dispatch)=>{
   return{
     onHandleSelectPokemon:(selectedPokemon) =>
@@ -58,6 +57,9 @@ const mapDispatchToProps = (dispatch)=>{
         dispatch(toggleShowPopupAction(showPopup));
         dispatch(getPokemonAction(selectedPokemon));
       },
+      onHandleSpriteError:(selectedPokemon) =>{
+        dispatch(spriteErrorAction(selectedPokemon));
+      }
   };
 }
 

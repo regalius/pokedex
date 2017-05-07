@@ -1,6 +1,6 @@
 import * as URL from '../constants/URL';
-export const beautifyPokemonName = (name)=>(
-  name.replace('-',' ').replace(/\b\w/g, l => l.toUpperCase())
+export const beautifyName = (name)=>(
+  name.replace(/[_-]/g,' ').replace(/\b\w/g, l => l.toUpperCase())
 );
 export const getPokemonDisplayImageFromName = (name)=>{
   return URL.POKEMON_IMAGE_URL+name+'.jpg'

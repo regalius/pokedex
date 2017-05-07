@@ -1,6 +1,6 @@
-import { put, call } from 'redux-saga/effects';
+import { put, call, fork } from 'redux-saga/effects';
 import { PokeFetch} from '../api/api';
-import { beautifyPokemonName, getPokemonDisplayImageFromName, getPokemonBaseSpriteFromURL, getIDfromURL } from '../utils/stringOperation';
+import { beautifyName, getPokemonDisplayImageFromName, getPokemonBaseSpriteFromURL, getIDfromURL } from '../utils/stringOperation';
 import * as types from '../constants/ActionTypes';
 
 export function* fetchPokemonSaga({ url }) {
@@ -10,7 +10,7 @@ export function* fetchPokemonSaga({ url }) {
         id: getIDfromURL(url),
         name,
         url,
-        displayName: beautifyPokemonName(name),
+        displayName: beautifyName(name),
         displayImage: getPokemonDisplayImageFromName(name),
         displaySprite: getPokemonBaseSpriteFromURL(url),
       }));
@@ -36,7 +36,7 @@ export function* addPokemonSaga({ url }) {
         id: getIDfromURL(url),
         name,
         url,
-        displayName: beautifyPokemonName(name),
+        displayName: beautifyName(name),
         displayImage: getPokemonDisplayImageFromName(name),
         displaySprite: getPokemonBaseSpriteFromURL(url),
       }));
@@ -60,8 +60,32 @@ export function* getPokemonSaga( { selectedPokemon }) {
     yield[
       put({ type: types.GET_POKEMON_SUCCESS, pokemon: fetchedPokemon })
     ];
+
+    var fetchedPokemonTypes=[];
+    for(let index in fetchedPokemon.types){
+      let type=fetchedPokemon.types[index];
+      let typeClone={...type};
+      var fetchedType = yield call(PokeFetch, type.type.url);
+      typeClone.type={...typeClone.type, ...fetchedType};
+      fetchedPokemonTypes.push(typeClone);
+    }
+    yield[
+      put({type: types.GET_POKEMON_TYPE_SUCCESS, types: fetchedPokemonTypes})
+    ];
+
+    var fetchedPokemonAbilities=[];
+    for(let index in fetchedPokemon.abilities){
+      let ability=fetchedPokemon.abilities[index];
+      let abilityClone={...ability};
+      var fetchedAbility = yield call(PokeFetch, ability.ability.url);
+      abilityClone.ability={...abilityClone.ability, ...fetchedAbility};
+      fetchedPokemonAbilities.push(abilityClone);
+    }
+    yield[
+      put({type: types.GET_POKEMON_ABILITY_SUCCESS, abilities: fetchedPokemonAbilities})
+    ];
   }catch (error){
-    console.log("get saga error");
+    console.log(error);
     yield put({ type: 'GET_POKEMON_ERROR', error });
   }
 }

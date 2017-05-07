@@ -1,5 +1,6 @@
 import initialState from './initialState';
 import * as types from '../constants/ActionTypes';
+import * as URL from '../constants/URL';
 
 export default function (state = initialState.pokemons, action){
   switch (action.type) {
@@ -11,6 +12,14 @@ export default function (state = initialState.pokemons, action){
       return { ...state, selectedPokemon: {...action.pokemon, loading:true} };
     case types.GET_POKEMON_SUCCESS:
       return { ...state, selectedPokemon: {...state.selectedPokemon, ...action.pokemon, loading:false} };
+    case types.GET_POKEMON_ABILITY_SUCCESS:
+      return { ...state, selectedPokemon: {...state.selectedPokemon, abilities: action.abilities} };
+    case types.GET_POKEMON_TYPE_SUCCESS:
+      return { ...state, selectedPokemon: {...state.selectedPokemon, types: action.types} };
+    case types.POKEMON_SPRITE_ERROR:
+      return { ...state, selectedPokemon: {...state.selectedPokemon, displaySprite: URL.POKEMON_SPRITES_NODATA_URL} };
+    case types.POKEMON_IMAGE_ERROR:
+      return { ...state, selectedPokemon: {...state.selectedPokemon, displaySprite: URL.POKEMON_SPRITES_NODATA_URL} };
     default:
       return state;
   }

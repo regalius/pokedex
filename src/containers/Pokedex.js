@@ -28,6 +28,7 @@ class Pokedex extends Component{
                 <PokedexControl
                   pokemons={pokemons}
                   selectedPokemon={selectedPokemon}
+                  ui={ui}
                 />
               </div>
               <PokedexFooter/>
