@@ -1,13 +1,14 @@
 import * as types from '../constants/ActionTypes';
+import { getURLFromPayload } from '../utils/stringOperation';
 
 export const selectPokemonAction = (pokemon) => ({
   type: types.SELECTED_POKEMON,
   pokemon
 });
 
-export const fetchPokemonAction = (url) => ({
+export const fetchPokemonAction = (payload) => ({
   type: types.FETCH_POKEMON_REQUEST,
-  url
+  payload,
 });
 
 export const addPokemonAction = (url) => ({

@@ -4,7 +4,7 @@ import PokedexPercentBar from './PokedexPercentBar';
 const PokedexStats = ({displaySprite, stats})=>(
   <div className="pokedex-stats pokedex-popup-block">
     <div className="pokedex-stats-sprites">
-      <img src={displaySprite}/>
+      <img src={displaySprite} alt="No Data"/>
     </div>
     <div className="pokedex-stats-wrapper">
       {stats.map(({ stat, base_stat})=>(

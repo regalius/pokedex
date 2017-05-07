@@ -59,8 +59,8 @@ const mapStateToProps=({ pokemons, ui })=>({
 });
 
 const mapDispatchToProps=(dispatch)=>({
-  onHandleBackButton: (showPopup) =>{
-    dispatch(toggleShowPopupAction(showPopup));
+  onHandleBackButton: () =>{
+    dispatch(toggleShowPopupAction());
   }
 });
 

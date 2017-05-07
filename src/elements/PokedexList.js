@@ -5,11 +5,11 @@ import { selectPokemonAction, addPokemonAction, getPokemonAction, spriteErrorAct
 import { toggleShowPopupAction } from '../actions/uiActions';
 import Waypoint from 'react-waypoint';
 
-const PokedexList = ({ pokemons, selectedPokemon, pagination, showPopup, onHandleSelectPokemon, onHandleGetPokemon, onHandleScrollEnd, onHandleSpriteError })=>(
-  <div id="pokedex-list-wrapper" className={showPopup ? " hidden": ""}>
+const PokedexList = ({ pokemons, selectedPokemon, pagination, showPopup, listMode, onHandleSelectPokemon, onHandleGetPokemon, onHandleScrollEnd, onHandleSpriteError })=>(
+  <div id="pokedex-list-wrapper" className={listMode + (showPopup ? " hidden": "")}>
     <ul id="pokedex-list">
       {pokemons.map((pokemon) =>(
-        <li key={pokemon.id} className={"pokedex-list-item" + (selectedPokemon.id==pokemon.id ? " active" : "")} style={{opacity:1}}>
+        <li key={pokemon.id} className={"pokedex-list-item" + (selectedPokemon.id===pokemon.id ? " active" : "")} style={{opacity:1}}>
             <div className="pokedex-list-thumbnail">
               <img src={pokemon.displaySprite ? pokemon.displaySprite : URL.POKEMON_SPRITES_NODATA_URL} onError={onHandleSpriteError.bind(this, pokemon)} alt=""/>
             </div>
@@ -17,7 +17,7 @@ const PokedexList = ({ pokemons, selectedPokemon, pagination, showPopup, onHandl
               <p className="pokedex-list-info-number">{pokemon.id}</p>
               <p className="pokedex-list-info-name">{pokemon.displayName}</p>
             </div>
-            <a href="#" onMouseOver={onHandleSelectPokemon.bind(this, pokemon)} onClick={onHandleGetPokemon.bind(this, pokemon, showPopup)}>
+            <a href="#" onMouseOver={onHandleSelectPokemon.bind(this, pokemon)} onClick={onHandleGetPokemon.bind(this, pokemon)}>
             </a>
         </li>
       ))}
@@ -42,6 +42,7 @@ const mapStateToProps = ({ pokemons, ui }) => ({
   selectedPokemon: pokemons.selectedPokemon,
   pagination: ui.pagination,
   showPopup: ui.showPopup,
+  listMode: ui.listMode,
 });
 
 const mapDispatchToProps = (dispatch)=>{
@@ -53,8 +54,8 @@ const mapDispatchToProps = (dispatch)=>{
       onHandleScrollEnd(pagination){
         dispatch(addPokemonAction(pagination.nextUrl));
       },
-      onHandleGetPokemon:(selectedPokemon, showPopup) => {
-        dispatch(toggleShowPopupAction(showPopup));
+      onHandleGetPokemon:(selectedPokemon) => {
+        dispatch(toggleShowPopupAction());
         dispatch(getPokemonAction(selectedPokemon));
       },
       onHandleSpriteError:(selectedPokemon) =>{

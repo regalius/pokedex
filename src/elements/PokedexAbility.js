@@ -2,7 +2,6 @@ import React from 'react';
 import { beautifyName } from '../utils/stringOperation';
 
 const PokedexAbility = ({ abilities }) =>{
-  console.log(abilities);
   return (<div className="pokedex-ability pokedex-popup-block">
       <p className="pokedex-popup-block-header">Abilities</p>
       <div className="pokedex-ability-wrapper">

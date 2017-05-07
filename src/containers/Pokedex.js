@@ -4,17 +4,12 @@ import PokedexScreen from '../components/PokedexScreen';
 import PokedexControl from '../components/PokedexControl';
 import PokedexHeader from '../components/PokedexHeader';
 import PokedexFooter from '../components/PokedexFooter';
-import PokedexPopup from '../elements/PokedexPopup';
-import * as URL from '../constants/URL'
-import { fetchPokemonAction, selectPokemonAction, addPokemonAction } from '../actions/pokeActions';
+import { fetchPokemonAction} from '../actions/pokeActions';
 import '../styles/pokedex.css';
 
 class Pokedex extends Component{
-  constructor(){
-    super();
-  }
   componentDidMount(){
-        this.props.dispatch(fetchPokemonAction(URL.POKE_API_POKEMON_ENDPOINT));
+    this.props.dispatch(fetchPokemonAction(this.props.ui.searchPayload));
   }
   render(){
     const { pokemons, selectedPokemon, ui } = this.props;

@@ -1,29 +1,53 @@
-import { put, call, fork } from 'redux-saga/effects';
+import { put, call} from 'redux-saga/effects';
 import { PokeFetch} from '../api/api';
-import { beautifyName, getPokemonDisplayImageFromName, getPokemonBaseSpriteFromURL, getIDfromURL } from '../utils/stringOperation';
+import { beautifyName, getPokemonDisplayImageFromName, getPokemonBaseSpriteFromURL, getIDfromURL,getURLFromPayload } from '../utils/stringOperation';
 import * as types from '../constants/ActionTypes';
 
-export function* fetchPokemonSaga({ url }) {
+export function* fetchPokemonSaga({ payload }) {
   try {
+    const url = getURLFromPayload(payload);
     const response = yield call(PokeFetch, url);
-    const pokemons = response.results.map(({ name , url }) => ({
-        id: getIDfromURL(url),
-        name,
-        url,
-        displayName: beautifyName(name),
-        displayImage: getPokemonDisplayImageFromName(name),
-        displaySprite: getPokemonBaseSpriteFromURL(url),
-      }));
-      const pagination={
-        previousUrl:response.previous,
-        count:response.count,
-        nextUrl:response.next
-      }
-    yield [
-      put({ type: types.FETCH_POKEMON_SUCCESS, pokemons }),
-      put({ type: types.SELECTED_POKEMON, pokemon: pokemons[0] }),
-      put({ type: types.UI_UPDATE_PAGINATION, pagination})
-    ];
+    switch(payload.name){
+      case "pokemon_type":
+      var pokemons = response.pokemon.map(({ pokemon }) => ({
+          id: getIDfromURL(pokemon.url),
+          name:pokemon.name,
+          url: pokemon.url,
+          displayName: beautifyName(pokemon.name),
+          displayImage: getPokemonDisplayImageFromName(pokemon.name),
+          displaySprite: getPokemonBaseSpriteFromURL(pokemon.url),
+        }));
+        var pagination={
+          previousUrl:null,
+          count:pokemons.length,
+          nextUrl:null
+        }
+      yield [
+        put({ type: types.FETCH_POKEMON_SUCCESS, pokemons }),
+        put({ type: types.SELECTED_POKEMON, pokemon: pokemons[0] }),
+        put({ type: types.UPDATE_PAGINATION, pagination})
+      ];
+      case "all_pokemon":
+      default:
+        var pokemons = response[payload.valueField].map(({ name , url }) => ({
+            id: getIDfromURL(url),
+            name,
+            url,
+            displayName: beautifyName(name),
+            displayImage: getPokemonDisplayImageFromName(name),
+            displaySprite: getPokemonBaseSpriteFromURL(url),
+          }));
+          var pagination={
+            previousUrl:response.previous,
+            count:response.count,
+            nextUrl:response.next
+          }
+        yield [
+          put({ type: types.FETCH_POKEMON_SUCCESS, pokemons }),
+          put({ type: types.SELECTED_POKEMON, pokemon: pokemons[0] }),
+          put({ type: types.UPDATE_PAGINATION, pagination})
+        ];
+    }
   } catch (error) {
     yield put({ type: 'FETCH_POKEMON_ERROR', error });
   }
@@ -47,7 +71,7 @@ export function* addPokemonSaga({ url }) {
       }
     yield [
       put({ type: types.ADD_POKEMON_SUCCESS, pokemons }),
-      put({ type: types.UI_UPDATE_PAGINATION, pagination})
+      put({ type: types.UPDATE_PAGINATION, pagination})
     ];
   } catch (error) {
     yield put({ type: 'ADD_POKEMON_ERROR', error });
@@ -56,7 +80,8 @@ export function* addPokemonSaga({ url }) {
 
 export function* getPokemonSaga( { selectedPokemon }) {
   try{
-    const fetchedPokemon = yield call(PokeFetch,selectedPokemon.url);
+    const url = getURLFromPayload({query:'pokemon', id: selectedPokemon.id})
+    const fetchedPokemon = yield call(PokeFetch,url);
     yield[
       put({ type: types.GET_POKEMON_SUCCESS, pokemon: fetchedPokemon })
     ];
@@ -85,22 +110,6 @@ export function* getPokemonSaga( { selectedPokemon }) {
       put({type: types.GET_POKEMON_ABILITY_SUCCESS, abilities: fetchedPokemonAbilities})
     ];
   }catch (error){
-    console.log(error);
     yield put({ type: 'GET_POKEMON_ERROR', error });
   }
 }
-
-/*export function* fetchTypeSaga({ url }) {
-  try {
-    const response = yield call(PokeFetch, url);
-    const types = response.results.map(({ name , url }) => {
-
-    };
-    yield [
-      put({ type: types.FETCH_TYPE_SUCCESS, types }),
-    ];
-  } catch (error) {
-    yield put({ type: 'FETCH_POKEMON_ERROR', error });
-  }
-}
-*/
