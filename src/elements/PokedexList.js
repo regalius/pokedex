@@ -1,0 +1,64 @@
+import React from 'react';
+import * as URL from '../constants/URL';
+import { connect } from 'react-redux';
+import { selectPokemonAction, addPokemonAction, getPokemonAction } from '../actions/pokeActions';
+import { toggleShowPopupAction } from '../actions/uiActions';
+import Waypoint from 'react-waypoint';
+
+const PokedexList = ({ pokemons, selectedPokemon, pagination, showPopup, onHandleSelectPokemon, onHandleGetPokemon, onHandleScrollEnd })=>(
+  <div id="pokedex-list-wrapper">
+    <ul id="pokedex-list">
+      {pokemons.map((pokemon) =>(
+        <li key={pokemon.id} className={"pokedex-list-item" + (selectedPokemon.id==pokemon.id ? " active" : "")} style={{opacity:1}}>
+            <div className="pokedex-list-thumbnail">
+              <img src={pokemon.displaySprite ? pokemon.displaySprite : URL.POKEMON_SPRITES_NODATA_URL} alt=""/>
+            </div>
+            <div className="pokedex-list-info-wrapper">
+              <p className="pokedex-list-info-number">{pokemon.id}</p>
+              <p className="pokedex-list-info-name">{pokemon.displayName}</p>
+            </div>
+            <a href="#" onMouseOver={onHandleSelectPokemon.bind(this, pokemon)} onClick={onHandleGetPokemon.bind(this, pokemon, showPopup)}>
+            </a>
+        </li>
+      ))}
+      {
+        pagination.nextUrl
+          ? <div className="waypoint">
+              <Waypoint onEnter={onHandleScrollEnd.bind(this, pagination)}/>
+              <div className="loader" style={{width:"50px",height:"50px"}}></div>
+              <p>Fetching data please wait...</p>
+            </div>
+          : <div className="waypoint">
+              <p>End of result.</p>
+            </div>
+
+      }
+    </ul>
+  </div>
+);
+
+const mapStateToProps = ({ pokemons, ui }) => ({
+  pokemons: pokemons.pokemons,
+  selectedPokemon: pokemons.selectedPokemon,
+  pagination: ui.pagination,
+  showPopup: ui.showPopup,
+});
+
+
+const mapDispatchToProps = (dispatch)=>{
+  return{
+    onHandleSelectPokemon:(selectedPokemon) =>
+      {
+        dispatch(selectPokemonAction(selectedPokemon));
+      },
+      onHandleScrollEnd(pagination){
+        dispatch(addPokemonAction(pagination.nextUrl));
+      },
+      onHandleGetPokemon:(selectedPokemon, showPopup) => {
+        dispatch(toggleShowPopupAction(showPopup));
+        dispatch(getPokemonAction(selectedPokemon));
+      },
+  };
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(PokedexList);
