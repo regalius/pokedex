@@ -15,7 +15,6 @@ export function* fetchPokemonSaga({ payload }) {
           id: getIDfromURL(pokemon.url),
           name:pokemon.name,
           url: pokemon.url,
-          displayName: beautifyName(pokemon.name),
           displayImage: getPokemonDisplayImageFromName(pokemon.name),
           displaySprite: getPokemonBaseSpriteFromURL(pokemon.url),
         }));
@@ -30,7 +29,6 @@ export function* fetchPokemonSaga({ payload }) {
           id: getIDfromURL(pokemon_species.url),
           name:pokemon_species.name,
           url: pokemon_species.url,
-          displayName: beautifyName(pokemon_species.name),
           displayImage: getPokemonDisplayImageFromName(pokemon_species.name),
           displaySprite: getPokemonBaseSpriteFromURL(pokemon_species.url),
         }));
@@ -46,7 +44,6 @@ export function* fetchPokemonSaga({ payload }) {
             id: getIDfromURL(url),
             name,
             url,
-            displayName: beautifyName(name),
             displayImage: getPokemonDisplayImageFromName(name),
             displaySprite: getPokemonBaseSpriteFromURL(url),
           }));
@@ -76,7 +73,6 @@ export function* addPokemonSaga({ url }) {
         id: getIDfromURL(url),
         name,
         url,
-        displayName: beautifyName(name),
         displayImage: getPokemonDisplayImageFromName(name),
         displaySprite: getPokemonBaseSpriteFromURL(url),
       }));
@@ -148,22 +144,24 @@ function* getPokemonSpecies(pokemon){
   var description ="";
   if(flavor_text_entries){
     for(var i =0; i< flavor_text_entries.length;i++){
+      console.log(flavor_text_entries[i]);
       if(flavor_text_entries[i].language.name=="en"){
         description=flavor_text_entries[i].flavor_text;
+        console.log(description,"if");
+        break;
       }
     }
   }
-  var filteredPokemonSpecies={
-    habitat: fetchedPokemonSpecies.habitat.name,
-    color: fetchedPokemonSpecies.color.name,
-    shape: fetchedPokemonSpecies.shape.name,
-    egg_groups:fetchedPokemonSpecies.egg_groups,
-    evolution_chain:fetchedPokemonSpecies.evolution_chain,
-    gender_rate:fetchedPokemonSpecies.gender_rate,
-    hatch_counter:fetchedPokemonSpecies.hatch_counter,
-    capture_rate:fetchedPokemonSpecies.capture_rate,
-    description
-  };
+  var filteredPokemonSpecies={description};
+  fetchedPokemonSpecies.habitat ? filteredPokemonSpecies["habitat"]= fetchedPokemonSpecies.habitat.name :'';
+  fetchedPokemonSpecies.color ? filteredPokemonSpecies["color"]= fetchedPokemonSpecies.color.name :'';
+  fetchedPokemonSpecies.shape ? filteredPokemonSpecies["shape"] = fetchedPokemonSpecies.shape.name :'';
+  fetchedPokemonSpecies.egg_groups ? filteredPokemonSpecies["egg_groups"] = fetchedPokemonSpecies.egg_groups : '';
+  fetchedPokemonSpecies.evolution_chain ? fetchedPokemonSpecies["evolution_chain"] = fetchedPokemonSpecies.evolution_chain: '';
+  fetchedPokemonSpecies.gender_rate ? filteredPokemonSpecies["gender_rate"] = fetchedPokemonSpecies.gender_rate : '';
+  fetchedPokemonSpecies.hatch_counter ? filteredPokemonSpecies["hatch_counter"] = fetchedPokemonSpecies.hatch_counter:'';
+  fetchedPokemonSpecies.capture_rate ? filteredPokemonSpecies["capture_rate"] = fetchedPokemonSpecies.capture_rate : '';
+
   return filteredPokemonSpecies;
 }
 

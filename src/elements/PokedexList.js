@@ -3,6 +3,7 @@ import * as URL from '../constants/URL';
 import { connect } from 'react-redux';
 import { selectPokemonAction, addPokemonAction, getPokemonAction, spriteErrorAction } from '../actions/pokeActions';
 import { toggleShowPopupAction } from '../actions/uiActions';
+import { beautifyName } from '../utils/stringOperation';
 import Waypoint from 'react-waypoint';
 
 const PokedexList = ({ pokemons, selectedPokemon, pagination, showPopup, listMode, onHandleSelectPokemon, onHandleGetPokemon, onHandleScrollEnd, onHandleSpriteError })=>(
@@ -15,7 +16,7 @@ const PokedexList = ({ pokemons, selectedPokemon, pagination, showPopup, listMod
             </div>
             <div className="pokedex-list-info-wrapper">
               <p className="pokedex-list-info-number">{pokemon.id}</p>
-              <p className="pokedex-list-info-name">{pokemon.displayName}</p>
+              <p className="pokedex-list-info-name">{beautifyName(pokemon.name)}</p>
             </div>
             <a href="#" onMouseOver={onHandleSelectPokemon.bind(this, pokemon)} onClick={onHandleGetPokemon.bind(this, pokemon)}>
             </a>

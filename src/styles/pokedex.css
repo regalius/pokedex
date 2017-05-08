@@ -30,6 +30,16 @@
     border-radius: 10px;
     overflow: hidden;
 }
+.pokedex-text-container {
+    position: relative;
+    color: #000;
+    font-size: 16px;
+    text-align: left;
+    background: #FFF;
+    padding: 10px;
+    border: 2px solid #999;
+    border-radius: 20px;
+}
 .type-label{
   display: inline-block;
   padding:10px;
@@ -735,6 +745,12 @@
 }
 .percent-bar-value {
   right:20px;
+}
+.pokedex-pokemon-description{
+  font-size: 18px;
+  color: #FFF;
+  text-align: left;
+  padding:20px 0;
 }
 .pokedex-measurement-title {
     display: block;

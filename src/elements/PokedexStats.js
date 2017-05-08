@@ -15,14 +15,6 @@ const PokedexStats = ({displaySprite, stats, species })=>(
         }
       </div>
     </div>
-    <div>
-      <div className="pokedex-stats-description">
-        { species.flavor_text_entries && species.flavor_text_entries.length>0
-          ? <p></p>
-          : <div style={{textAlign:"center"}}><div className="loader"></div></div>
-        }
-      </div>
-    </div>
   </div>
 );
 

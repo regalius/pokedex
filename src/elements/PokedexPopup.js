@@ -2,10 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux'
 import PokedexSpriteShowcase from './PokedexSpriteShowcase';
 import PokedexStats from './PokedexStats';
+import PokedexSpecies from './PokedexSpecies';
 import PokedexMeasurement from './PokedexMeasurement';
 import PokedexAbility from './PokedexAbility';
 import PokedexMatchup from './PokedexMatchup';
 import { toggleShowPopupAction } from '../actions/uiActions';
+import { beautifyName } from '../utils/stringOperation';
+
 const PokedexPopup = ({ selectedPokemon, showPopup, loading, onHandleBackButton })=>{
   return (
     <div>
@@ -18,7 +21,7 @@ const PokedexPopup = ({ selectedPokemon, showPopup, loading, onHandleBackButton 
                     </div>
                     <div className="pokedex-popup-content">
                       <h2 className="pokedex-popup-header">
-                        {selectedPokemon.id} {selectedPokemon.displayName}
+                        {selectedPokemon.id} {beautifyName(selectedPokemon.name)}
                         <div className="pokedex-popup-header-type-wrapper">
                           {selectedPokemon.types &&
                             (selectedPokemon.types.map(({ type })=>(
@@ -28,9 +31,12 @@ const PokedexPopup = ({ selectedPokemon, showPopup, loading, onHandleBackButton 
                         </div>
                       </h2>
                       {selectedPokemon.stats  &&
-                        <PokedexStats stats={selectedPokemon.stats} displaySprite={selectedPokemon.displaySprite} species={selectedPokemon.species}/>
+                        <PokedexStats stats={selectedPokemon.stats} displaySprite={selectedPokemon.displaySprite}/>
                       }
-                      {(selectedPokemon.measurements) &&
+                      {selectedPokemon.species &&
+                        <PokedexSpecies species={selectedPokemon.species} />
+                      }
+                      {selectedPokemon.measurements &&
                         <PokedexMeasurement measurements={selectedPokemon.measurements} displaySprite={selectedPokemon.displaySprite}/>
                       }
                       {selectedPokemon.sprites &&
