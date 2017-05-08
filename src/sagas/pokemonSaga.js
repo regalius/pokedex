@@ -7,9 +7,11 @@ export function* fetchPokemonSaga({ payload }) {
   try {
     const url = getURLFromPayload(payload);
     const response = yield call(PokeFetch, url);
+    var pokemons;
+    var pagination;
     switch(payload.name){
       case "pokemon_type":
-      var pokemons = response.pokemon.map(({ pokemon }) => ({
+        pokemons = response.pokemon.map(({ pokemon }) => ({
           id: getIDfromURL(pokemon.url),
           name:pokemon.name,
           url: pokemon.url,
@@ -17,20 +19,30 @@ export function* fetchPokemonSaga({ payload }) {
           displayImage: getPokemonDisplayImageFromName(pokemon.name),
           displaySprite: getPokemonBaseSpriteFromURL(pokemon.url),
         }));
-        var pagination={
+        pagination={
           previousUrl:null,
           count:pokemons.length,
           nextUrl:null
         }
-      yield [
-        put({ type: types.UPDATE_PAGINATION, pagination}),
-        put({ type: types.FETCH_POKEMON_SUCCESS, pokemons }),
-        put({ type: types.SELECTED_POKEMON, pokemon: pokemons[0] }),
-      ];
       break;
+      case "pokedex_name":
+        pokemons = response.pokemon_entries.map(({ pokemon_species }) => ({
+          id: getIDfromURL(pokemon_species.url),
+          name:pokemon_species.name,
+          url: pokemon_species.url,
+          displayName: beautifyName(pokemon_species.name),
+          displayImage: getPokemonDisplayImageFromName(pokemon_species.name),
+          displaySprite: getPokemonBaseSpriteFromURL(pokemon_species.url),
+        }));
+        pagination={
+          previousUrl:null,
+          count:pokemons.length,
+          nextUrl:null
+        }
+        break;
       case "all_pokemon":
       default:
-        var pokemons = response[payload.valueField].map(({ name , url }) => ({
+          pokemons = response[payload.valueField].map(({ name , url }) => ({
             id: getIDfromURL(url),
             name,
             url,
@@ -38,19 +50,21 @@ export function* fetchPokemonSaga({ payload }) {
             displayImage: getPokemonDisplayImageFromName(name),
             displaySprite: getPokemonBaseSpriteFromURL(url),
           }));
-          var pagination={
+          pagination={
             previousUrl:response.previous,
             count:response.count,
             nextUrl:response.next
           }
-        yield [
-          put({ type: types.UPDATE_PAGINATION, pagination}),
-          put({ type: types.FETCH_POKEMON_SUCCESS, pokemons }),
-          put({ type: types.SELECTED_POKEMON, pokemon: pokemons[0] }),
-        ];
         break;
     }
+
+    yield [
+      put({ type: types.UPDATE_PAGINATION, pagination}),
+      put({ type: types.FETCH_POKEMON_SUCCESS, pokemons }),
+      put({ type: types.SELECTED_POKEMON, pokemon: pokemons[0] }),
+    ];
   } catch (error) {
+    console.log(error);
     yield put({ type: 'FETCH_POKEMON_ERROR', error });
   }
 }
