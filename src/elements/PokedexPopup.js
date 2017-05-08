@@ -28,10 +28,10 @@ const PokedexPopup = ({ selectedPokemon, showPopup, loading, onHandleBackButton 
                         </div>
                       </h2>
                       {selectedPokemon.stats  &&
-                        <PokedexStats stats={selectedPokemon.stats} displaySprite={selectedPokemon.displaySprite}/>
+                        <PokedexStats stats={selectedPokemon.stats} displaySprite={selectedPokemon.displaySprite} species={selectedPokemon.species}/>
                       }
-                      {(selectedPokemon.weight || selectedPokemon.height) &&
-                        <PokedexMeasurement weight={selectedPokemon.weight} height={selectedPokemon.height} displaySprite={selectedPokemon.displaySprite}/>
+                      {(selectedPokemon.measurements) &&
+                        <PokedexMeasurement measurements={selectedPokemon.measurements} displaySprite={selectedPokemon.displaySprite}/>
                       }
                       {selectedPokemon.sprites &&
                          <PokedexSpriteShowcase sprites={selectedPokemon.sprites} />

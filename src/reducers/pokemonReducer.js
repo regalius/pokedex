@@ -14,6 +14,8 @@ export default function (state = initialState.pokemons, action){
       return { ...state, selectedPokemon: {...state.selectedPokemon, ...action.pokemon, loading:false} };
     case types.GET_POKEMON_ABILITY_SUCCESS:
       return { ...state, selectedPokemon: {...state.selectedPokemon, abilities: action.abilities} };
+    case types.GET_POKEMON_SPECIES_SUCCESS:
+      return { ...state, selectedPokemon: {...state.selectedPokemon, species: action.species} };
     case types.GET_POKEMON_TYPE_SUCCESS:
       return { ...state, selectedPokemon: {...state.selectedPokemon, types: action.types} };
     case types.POKEMON_SPRITE_ERROR:

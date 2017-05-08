@@ -1,6 +1,6 @@
 import { put, call} from 'redux-saga/effects';
 import { PokeFetch} from '../api/api';
-import { beautifyName, getIDfromURL, getURLFromPayload } from '../utils/stringOperation';
+import { getIDfromURL, getURLFromPayload } from '../utils/stringOperation';
 import * as types from '../constants/ActionTypes';
 
 export function* fetchSearchPayloadListSaga({ payload }) {

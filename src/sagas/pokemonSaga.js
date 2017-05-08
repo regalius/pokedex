@@ -98,34 +98,83 @@ export function* getPokemonSaga( { selectedPokemon }) {
   try{
     const url = getURLFromPayload({query:'pokemon', id: selectedPokemon.id})
     const fetchedPokemon = yield call(PokeFetch,url);
+    const filteredPokemon={
+      loading:false,
+      abilities:fetchedPokemon.abilities,
+      stats:fetchedPokemon.stats,
+      measurements:{weight: fetchedPokemon.weight, height: fetchedPokemon.height},
+      sprites:fetchedPokemon.sprites,
+      types:fetchedPokemon.types,
+      species:fetchedPokemon.species
+    }
     yield[
-      put({ type: types.GET_POKEMON_SUCCESS, pokemon: fetchedPokemon })
+      put({ type: types.GET_POKEMON_SUCCESS, pokemon: filteredPokemon })
     ];
 
-    var fetchedPokemonTypes=[];
-    for(let index in fetchedPokemon.types){
-      let type=fetchedPokemon.types[index];
-      let typeClone={...type};
-      var fetchedType = yield call(PokeFetch, type.type.url);
-      typeClone.type={...typeClone.type, ...fetchedType};
-      fetchedPokemonTypes.push(typeClone);
-    }
+    const fetchedPokemonSpecies = yield getPokemonSpecies(filteredPokemon);
+    yield[
+      put({ type: types.GET_POKEMON_SPECIES_SUCCESS, species: fetchedPokemonSpecies })
+    ];
+
+    const fetchedPokemonTypes= yield getPokemonTypes(filteredPokemon);
     yield[
       put({type: types.GET_POKEMON_TYPE_SUCCESS, types: fetchedPokemonTypes})
     ];
 
-    var fetchedPokemonAbilities=[];
-    for(let index in fetchedPokemon.abilities){
-      let ability=fetchedPokemon.abilities[index];
-      let abilityClone={...ability};
-      var fetchedAbility = yield call(PokeFetch, ability.ability.url);
-      abilityClone.ability={...abilityClone.ability, ...fetchedAbility};
-      fetchedPokemonAbilities.push(abilityClone);
-    }
+    const fetchedPokemonAbilities= yield getPokemonAbilities(filteredPokemon);
     yield[
       put({type: types.GET_POKEMON_ABILITY_SUCCESS, abilities: fetchedPokemonAbilities})
     ];
   }catch (error){
     yield put({ type: 'GET_POKEMON_ERROR', error });
   }
+}
+
+function* getPokemonAbilities(pokemon){
+  var fetchedPokemonAbilities=[];
+  for(let index in pokemon.abilities){
+    let ability=pokemon.abilities[index];
+    let abilityClone={...ability};
+    var fetchedAbility = yield call(PokeFetch, ability.ability.url);
+    abilityClone.ability={...abilityClone.ability, effect: fetchedAbility.effect_entries[0].effect};
+    fetchedPokemonAbilities.push(abilityClone);
+  }
+  return fetchedPokemonAbilities;
+}
+
+function* getPokemonSpecies(pokemon){
+  const fetchedPokemonSpecies = yield call(PokeFetch, pokemon.species.url);
+  var flavor_text_entries = fetchedPokemonSpecies.flavor_text_entries;
+  var description ="";
+  if(flavor_text_entries){
+    for(var i =0; i< flavor_text_entries.length;i++){
+      if(flavor_text_entries[i].language.name=="en"){
+        description=flavor_text_entries[i].flavor_text;
+      }
+    }
+  }
+  var filteredPokemonSpecies={
+    habitat: fetchedPokemonSpecies.habitat.name,
+    color: fetchedPokemonSpecies.color.name,
+    shape: fetchedPokemonSpecies.shape.name,
+    egg_groups:fetchedPokemonSpecies.egg_groups,
+    evolution_chain:fetchedPokemonSpecies.evolution_chain,
+    gender_rate:fetchedPokemonSpecies.gender_rate,
+    hatch_counter:fetchedPokemonSpecies.hatch_counter,
+    capture_rate:fetchedPokemonSpecies.capture_rate,
+    description
+  };
+  return filteredPokemonSpecies;
+}
+
+function* getPokemonTypes(pokemon){
+  var fetchedPokemonTypes=[];
+  for(let index in pokemon.types){
+    let type=pokemon.types[index];
+    let typeClone={...type};
+    var fetchedType = yield call(PokeFetch, type.type.url);
+    typeClone.type={...typeClone.type, damage_relations:fetchedType.damage_relations};
+    fetchedPokemonTypes.push(typeClone);
+  }
+  return fetchedPokemonTypes;
 }

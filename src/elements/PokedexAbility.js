@@ -16,8 +16,8 @@ const PokedexAbility = ({ abilities }) =>{
               }
             </div>
             <div className="pokedex-dropdown-body">
-            {ability.effect_entries ?
-                <p>{ability.effect_entries[0].effect}</p>
+            {ability.effect ?
+                <p>{ability.effect}</p>
               :
                 <div style={{textAlign:"center"}}>
                   <div className="loader" style={{width:"30px", height:"30px"}}></div>
