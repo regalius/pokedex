@@ -364,12 +364,17 @@
     padding: 10px 20px;
     color: #FFF;
     font-size: 12px;
+    font-weight: 700;
     background: transparent;
     border: none;
     outline: none;
     cursor: pointer;
     border-radius: 10px;
     border: 2px solid #FFF;
+}
+.pokedex-submit:hover{
+  background: #FFF;
+  color: #37474f;
 }
 .hidden .pokedex-control-bar-list-mode-item-guide{
   opacity: 0;
@@ -692,9 +697,9 @@
   width: 0;
   height: 100%;
   background: #ff851b;
-  -webkit-transition: width .5s;
-  -o-transition: width .5s;
-  transition: width .5s;
+  -webkit-animation: percent-bar .5s;
+  -moz-animation: percent-bar .5s;
+  animation: percent-bar .5s;
 }
 .hp .percent-bar-filler{
   background: #F44336;
@@ -1000,4 +1005,13 @@
     -ms-transform: rotate(360deg);
     transform: rotate(360deg);
   }
+}
+@-webkit-keyframes percent-bar {
+   0% { width: 0; }
+}
+@-moz-keyframes percent-bar {
+   0% { width: 0; }
+}
+keyframes percent-bar {
+   0% { width: 0; }
 }

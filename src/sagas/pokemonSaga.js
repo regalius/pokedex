@@ -27,6 +27,7 @@ export function* fetchPokemonSaga({ payload }) {
         put({ type: types.FETCH_POKEMON_SUCCESS, pokemons }),
         put({ type: types.SELECTED_POKEMON, pokemon: pokemons[0] }),
       ];
+      break;
       case "all_pokemon":
       default:
         var pokemons = response[payload.valueField].map(({ name , url }) => ({
@@ -47,6 +48,7 @@ export function* fetchPokemonSaga({ payload }) {
           put({ type: types.FETCH_POKEMON_SUCCESS, pokemons }),
           put({ type: types.SELECTED_POKEMON, pokemon: pokemons[0] }),
         ];
+        break;
     }
   } catch (error) {
     yield put({ type: 'FETCH_POKEMON_ERROR', error });
