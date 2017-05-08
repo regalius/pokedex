@@ -23,9 +23,9 @@ export function* fetchPokemonSaga({ payload }) {
           nextUrl:null
         }
       yield [
+        put({ type: types.UPDATE_PAGINATION, pagination}),
         put({ type: types.FETCH_POKEMON_SUCCESS, pokemons }),
         put({ type: types.SELECTED_POKEMON, pokemon: pokemons[0] }),
-        put({ type: types.UPDATE_PAGINATION, pagination})
       ];
       case "all_pokemon":
       default:
@@ -43,9 +43,9 @@ export function* fetchPokemonSaga({ payload }) {
             nextUrl:response.next
           }
         yield [
+          put({ type: types.UPDATE_PAGINATION, pagination}),
           put({ type: types.FETCH_POKEMON_SUCCESS, pokemons }),
           put({ type: types.SELECTED_POKEMON, pokemon: pokemons[0] }),
-          put({ type: types.UPDATE_PAGINATION, pagination})
         ];
     }
   } catch (error) {
