@@ -6,7 +6,7 @@ import { listModeChangeAction, searchPayloadChangeAction, getPayloadListAction, 
 import { connect } from 'react-redux';
 import { beautifyName } from '../utils/stringOperation';
 
-const PokedexControlBar = ({ searchPayload, listMode, showPopup, payloadList, onListModeToggle, onSearchTermChange, onPayloadChange, onSearch })=>{
+const PokedexControlBar = ({ pagination, searchPayload, listMode, showPopup, payloadList, onListModeToggle, onSearchTermChange, onPayloadChange, onSearch })=>{
   return(
     <div id="pokedex-control-bar" style={{opacity: (showPopup ? "0" : "")}}>
       <div className="pokedex-control-bar-list-mode">
@@ -23,6 +23,7 @@ const PokedexControlBar = ({ searchPayload, listMode, showPopup, payloadList, on
         ))}
       </div>
       <form className="pokedex-control-bar-search" onSubmit={(e)=>{e.preventDefault(); onSearch(searchPayload);}}>
+        <span className="pokedex-control-bar-search-caption">Showing {pagination.count} results for </span>
         <select name="search-term" id="pokedex-select-search-term" className="pokedex-select" value={searchPayload.name} onChange={(e)=>{onSearchTermChange(e.target.value)}}>
           {Object.keys(SEARCH_PAYLOAD).map((key)=>(
             <option key={key} value={key}>{beautifyName(SEARCH_PAYLOAD[key].name)}</option>
@@ -47,6 +48,7 @@ const mapStateToProps = ({ ui })=>(
     showPopup: ui.showPopup,
     payloadList: ui.payloadList,
     searchPayload: ui.searchPayload,
+    pagination: ui.pagination,
   }
 );
 

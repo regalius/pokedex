@@ -21,7 +21,7 @@ img{
 ol,ul{
     list-style: none;
 }
-a,p,h1,h2,h3,h4,h5,span{
+a,p,h1,h2,h3,h4,h5,span,li{
     font-family:"Metrophobic",Arial,sans-serif;
 }
 body{

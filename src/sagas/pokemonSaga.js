@@ -49,7 +49,7 @@ export function* fetchPokemonSaga({ payload }) {
           }));
           pagination={
             previousUrl:response.previous,
-            count:response.count,
+            count:response.count ? response.count: pokemons.length,
             nextUrl:response.next
           }
         break;
@@ -101,7 +101,8 @@ export function* getPokemonSaga( { selectedPokemon }) {
       measurements:{weight: fetchedPokemon.weight, height: fetchedPokemon.height},
       sprites:fetchedPokemon.sprites,
       types:fetchedPokemon.types,
-      species:fetchedPokemon.species
+      species:fetchedPokemon.species,
+      moves:fetchedPokemon.moves.map(({ move })=>(move)),
     }
     yield[
       put({ type: types.GET_POKEMON_SUCCESS, pokemon: filteredPokemon })
@@ -111,6 +112,13 @@ export function* getPokemonSaga( { selectedPokemon }) {
     yield[
       put({ type: types.GET_POKEMON_SPECIES_SUCCESS, species: fetchedPokemonSpecies })
     ];
+
+    if(fetchedPokemonSpecies.evolution_chain){
+      const fetchedPokemonEvoChain = yield getPokemonEvolutionChain(fetchedPokemonSpecies)
+      yield[
+        put({type: types.GET_POKEMON_EVO_CHAIN_SUCCESS, evolution_chain:fetchedPokemonEvoChain})
+      ];
+    }
 
     const fetchedPokemonTypes= yield getPokemonTypes(filteredPokemon);
     yield[
@@ -122,6 +130,7 @@ export function* getPokemonSaga( { selectedPokemon }) {
       put({type: types.GET_POKEMON_ABILITY_SUCCESS, abilities: fetchedPokemonAbilities})
     ];
   }catch (error){
+    console.log(error);
     yield put({ type: 'GET_POKEMON_ERROR', error });
   }
 }
@@ -144,10 +153,8 @@ function* getPokemonSpecies(pokemon){
   var description ="";
   if(flavor_text_entries){
     for(var i =0; i< flavor_text_entries.length;i++){
-      console.log(flavor_text_entries[i]);
       if(flavor_text_entries[i].language.name=="en"){
         description=flavor_text_entries[i].flavor_text;
-        console.log(description,"if");
         break;
       }
     }
@@ -156,12 +163,14 @@ function* getPokemonSpecies(pokemon){
   fetchedPokemonSpecies.habitat ? filteredPokemonSpecies["habitat"]= fetchedPokemonSpecies.habitat.name :'';
   fetchedPokemonSpecies.color ? filteredPokemonSpecies["color"]= fetchedPokemonSpecies.color.name :'';
   fetchedPokemonSpecies.shape ? filteredPokemonSpecies["shape"] = fetchedPokemonSpecies.shape.name :'';
-  fetchedPokemonSpecies.egg_groups ? filteredPokemonSpecies["egg_groups"] = fetchedPokemonSpecies.egg_groups : '';
+  fetchedPokemonSpecies.egg_groups ? filteredPokemonSpecies["egg_groups"] = fetchedPokemonSpecies.egg_groups.map(({ name })=>(name)) : '';
   fetchedPokemonSpecies.evolution_chain ? fetchedPokemonSpecies["evolution_chain"] = fetchedPokemonSpecies.evolution_chain: '';
-  fetchedPokemonSpecies.gender_rate ? filteredPokemonSpecies["gender_rate"] = fetchedPokemonSpecies.gender_rate : '';
+  fetchedPokemonSpecies.gender_rate.toString() ? filteredPokemonSpecies["gender_rate"] = fetchedPokemonSpecies.gender_rate.toString() : '';
   fetchedPokemonSpecies.hatch_counter ? filteredPokemonSpecies["hatch_counter"] = fetchedPokemonSpecies.hatch_counter:'';
   fetchedPokemonSpecies.capture_rate ? filteredPokemonSpecies["capture_rate"] = fetchedPokemonSpecies.capture_rate : '';
-
+  fetchedPokemonSpecies.growth_rate ? filteredPokemonSpecies["growth_rate"] = fetchedPokemonSpecies.growth_rate.name : '';
+  fetchedPokemonSpecies.generation ? filteredPokemonSpecies["generation"] = fetchedPokemonSpecies.generation.name : '';
+  fetchedPokemonSpecies.evolution_chain ? filteredPokemonSpecies["evolution_chain"] = fetchedPokemonSpecies.evolution_chain : '';
   return filteredPokemonSpecies;
 }
 
@@ -175,4 +184,44 @@ function* getPokemonTypes(pokemon){
     fetchedPokemonTypes.push(typeClone);
   }
   return fetchedPokemonTypes;
+}
+
+function* getPokemonEvolutionChain(pokemon){
+  const chain = pokemon.evolution_chain;
+  const fetchedPokemonEvoChain = yield call(PokeFetch, chain.url);
+  var filteredPokemonEvoChain={};
+  var evolutionTable=[];
+  var currentChain=fetchedPokemonEvoChain.chain;
+  var currentStage=[{...currentChain.species,
+                        id:getIDfromURL(currentChain.species.url),
+                        displaySprite:getPokemonBaseSpriteFromURL(currentChain.species.url),
+                        displayImage:getPokemonDisplayImageFromName(currentChain.species.name)}];
+  evolutionTable.push(currentStage);
+  var nextChain = currentChain.evolves_to;
+  while(nextChain && nextChain.length>0){
+      currentChain=nextChain;
+      nextChain= [];
+      currentStage=[];
+      for(var i=0; i<currentChain.length;i++){
+          if(currentChain[i]){
+            currentStage.push({...currentChain[i].species,
+                                  id:getIDfromURL(currentChain[i].species.url),
+                                  displaySprite:getPokemonBaseSpriteFromURL(currentChain[i].species.url),
+                                  displayImage:getPokemonDisplayImageFromName(currentChain[i].species.name),
+                                  evolution_details: currentChain[i].evolution_details,
+                                  prevNodes: currentChain[i].prevNodes ? currentChain[i].prevNodes : 0 ,
+                                });
+            if(currentChain[i].evolves_to){
+              var nextNodes = currentChain[i].evolves_to.map((evo)=>({
+                ...evo,
+                prevNodes:currentStage.length-1
+              }));
+              nextChain = [...nextChain,...nextNodes];
+            }
+          }
+      }
+      evolutionTable.push(currentStage);
+  }
+  filteredPokemonEvoChain= {...chain, evolutionTable};
+  return filteredPokemonEvoChain;
 }

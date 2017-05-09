@@ -18,6 +18,8 @@ export default function (state = initialState.pokemons, action){
       return { ...state, selectedPokemon: {...state.selectedPokemon, species: action.species} };
     case types.GET_POKEMON_TYPE_SUCCESS:
       return { ...state, selectedPokemon: {...state.selectedPokemon, types: action.types} };
+    case types.GET_POKEMON_EVO_CHAIN_SUCCESS:
+      return { ...state, selectedPokemon: {...state.selectedPokemon, species: {...state.selectedPokemon.species, evolution_chain : action.evolution_chain}} };
     case types.POKEMON_SPRITE_ERROR:
       return { ...state, selectedPokemon: {...state.selectedPokemon, displaySprite: URL.POKEMON_SPRITES_NODATA_URL} };
     case types.POKEMON_IMAGE_ERROR:

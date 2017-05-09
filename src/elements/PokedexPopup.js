@@ -6,6 +6,7 @@ import PokedexSpecies from './PokedexSpecies';
 import PokedexMeasurement from './PokedexMeasurement';
 import PokedexAbility from './PokedexAbility';
 import PokedexMatchup from './PokedexMatchup';
+import PokedexMoves from './PokedexMoves';
 import { toggleShowPopupAction } from '../actions/uiActions';
 import { beautifyName } from '../utils/stringOperation';
 
@@ -33,8 +34,9 @@ const PokedexPopup = ({ selectedPokemon, showPopup, loading, onHandleBackButton 
                       {selectedPokemon.stats  &&
                         <PokedexStats stats={selectedPokemon.stats} displaySprite={selectedPokemon.displaySprite}/>
                       }
-                      {selectedPokemon.species &&
-                        <PokedexSpecies species={selectedPokemon.species} />
+                      {selectedPokemon.species && selectedPokemon.species.description
+                        ? <PokedexSpecies species={selectedPokemon.species} />
+                        : <div className="loader" style={{width: "50px",height: "50px"}}></div>
                       }
                       {selectedPokemon.measurements &&
                         <PokedexMeasurement measurements={selectedPokemon.measurements} displaySprite={selectedPokemon.displaySprite}/>
@@ -47,6 +49,9 @@ const PokedexPopup = ({ selectedPokemon, showPopup, loading, onHandleBackButton 
                       }
                       {selectedPokemon.types &&
                         <PokedexMatchup types={selectedPokemon.types}/>
+                      }
+                      {selectedPokemon.moves &&
+                        <PokedexMoves moves={selectedPokemon.moves}/>
                       }
                     </div>
                   </div>
