@@ -4,7 +4,7 @@ const PokemonMoves = ({ moves })=>(
   <div className="pokedex-moves pokedex-popup-block">
     <p className="pokedex-popup-block-header">Available Moves</p>
     {moves.map(({ name })=>(
-      <span>{beautifyName(name)}</span>
+      <span key={name}>{beautifyName(name)}</span>
     ))}
   </div>
 )

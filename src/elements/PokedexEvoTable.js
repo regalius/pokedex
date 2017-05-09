@@ -7,7 +7,7 @@ const PokedexEvoTable = ({ evolutionTable })=>(
           {evolutionTable.map((stage,index)=>{
               return(
                 <div key={index} className="pokedex-evolution-column">
-                      {stage.map(({name, displaySprite, displayImage, evolution_details, prevNodes})=>{
+                      {stage.map(({id, name, displaySprite, displayImage, evolution_details, prevNodes})=>{
                         return(<div key={name} className={"pokedex-evolution-cell" + (evolution_details ? " has-popup":"")}>
                                   <img src={displaySprite} alt={name}/>
                                   <span className="pokedex-evolution-cell-name">{beautifyName(name)}</span>
@@ -16,6 +16,14 @@ const PokedexEvoTable = ({ evolutionTable })=>(
                                       <div className="pokedex-evolution-cell-popup-thumbnail" style={{backgroundImage:"url("+ displayImage +")"}}>
                                       </div>
                                         <div className="pokedex-evolution-cell-popup-content-wrapper">
+                                          <p className="pokedex-evolution-cell-popup-content-title">
+                                            {id}.{beautifyName(name)}
+                                          </p>
+                                          <p className="pokedex-evolution-cell-popup-previous">
+                                            <span className="pokedex-evolution-cell-popup-previous-caption">Previous Stage</span>
+                                            <span className="pokedex-evolution-cell-popup-previous-name">{beautifyName(evolutionTable[index-1][prevNodes].name)}</span>
+                                            <img className="pokedex-evolution-cell-popup-previous-sprite" src={evolutionTable[index-1][prevNodes].displaySprite} alt={evolutionTable[index-1][prevNodes].name}/>
+                                          </p>
                                           {evolution_details.map((detail,index)=>(
                                             <div key={index} className="pokedex-evo-cell-popup-content-item">
                                               <p className="pokedex-evo-cell-popup-content-item-title">Evo. Condition

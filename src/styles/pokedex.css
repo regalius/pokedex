@@ -993,6 +993,7 @@
     transform: scale(0);
     transform-origin: bottom;
     opacity: 0;
+    z-index: 99999;
     -webkit-transition: transform .25s,opacity .25s;
     -o-transition: transform .25s,opacity .25s;
     transition: transform .25s,opacity .25s;
@@ -1109,6 +1110,35 @@
   -webkit-transition: transform .25s,opacity .25s;
   -o-transition: transform .25s,opacity .25s;
   transition: transform .25s,opacity .25s;
+}
+.pokedex-evolution-cell-popup-content-title {
+    font-size: 24px;
+    font-weight: 700;
+    text-align: left;
+    border-bottom: 2px solid #000;
+    padding-bottom: 5px;
+}
+.pokedex-evolution-cell-popup-previous-sprite {
+    display: inline-block;
+    width: 100px;
+    vertical-align: middle;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    margin-top: -70px;
+}
+.pokedex-evolution-cell-popup-previous-caption {
+    display: block;
+    text-align: left;
+    font-size: 18px;
+    font-weight: 700;
+}
+.pokedex-evolution-cell-popup-previous-name {
+    font-size: 18px;
+    text-align: left;
+}
+.pokedex-evolution-cell-popup-previous {
+    text-align: left;
 }
 .pokedex-evolution-cell-popup-thumbnail {
     display: inline-block;
