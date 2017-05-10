@@ -12,7 +12,7 @@ const PokedexList = ({ pokemons, selectedPokemon, pagination, showPopup, listMod
       {pokemons.map((pokemon) =>(
         <li key={pokemon.id} className={"pokedex-list-item" + (selectedPokemon.id===pokemon.id ? " active" : "")} style={{opacity:1}}>
             <div className="pokedex-list-thumbnail">
-              <img src={pokemon.displaySprite ? pokemon.displaySprite : URL.POKEMON_SPRITES_NODATA_URL} onError={onHandleSpriteError.bind(this, pokemon)} alt=""/>
+              <img src={pokemon.displaySprite} alt=""/>
             </div>
             <div className="pokedex-list-info-wrapper">
               <p className="pokedex-list-info-number">{pokemon.id}</p>

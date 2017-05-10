@@ -27,7 +27,7 @@ const PokedexSpecies = ({ species })=>(
       {species.shape &&
         <div className="pokedex-species-meta-item pokedex-species-shape">
           <span className="pokedex-species-meta-item-header">Shape</span>
-          <span className="standard-value"></span>
+          <span className={"shape-icon " + species.shape}></span>
           <span className="pokedex-species-meta-item-value">{beautifyName(species.shape)}</span>
         </div>
       }

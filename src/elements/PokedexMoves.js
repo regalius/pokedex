@@ -3,9 +3,13 @@ import { beautifyName } from '../utils/stringOperation';
 const PokemonMoves = ({ moves })=>(
   <div className="pokedex-moves pokedex-popup-block">
     <p className="pokedex-popup-block-header">Available Moves</p>
-    {moves.map(({ name })=>(
-      <span key={name}>{beautifyName(name)}</span>
-    ))}
+    <div className="pokedex-moves-container">
+      {moves.map(({ name })=>(
+        <div key={name} className="pokedex-moves-item">
+          <span>{beautifyName(name)}</span>
+        </div>
+      ))}
+    </div>
   </div>
 )
 

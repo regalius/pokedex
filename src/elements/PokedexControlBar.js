@@ -23,7 +23,7 @@ const PokedexControlBar = ({ pagination, searchPayload, listMode, showPopup, pay
         ))}
       </div>
       <form className="pokedex-control-bar-search" onSubmit={(e)=>{e.preventDefault(); onSearch(searchPayload);}}>
-        <span className="pokedex-control-bar-search-caption">Showing {pagination.count} results for </span>
+        <span className="pokedex-control-bar-search-caption"><span>Showing</span> <span className="count">{pagination.count}</span> <span>results for</span> </span>
         <select name="search-term" id="pokedex-select-search-term" className="pokedex-select" value={searchPayload.name} onChange={(e)=>{onSearchTermChange(e.target.value)}}>
           {Object.keys(SEARCH_PAYLOAD).map((key)=>(
             <option key={key} value={key}>{beautifyName(SEARCH_PAYLOAD[key].name)}</option>

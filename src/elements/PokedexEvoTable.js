@@ -21,7 +21,7 @@ const PokedexEvoTable = ({ evolutionTable })=>(
                                           </p>
                                           <p className="pokedex-evolution-cell-popup-previous">
                                             <span className="pokedex-evolution-cell-popup-previous-caption">Previous Stage</span>
-                                            <span className="pokedex-evolution-cell-popup-previous-name">{beautifyName(evolutionTable[index-1][prevNodes].name)}</span>
+                                            <span className="pokedex-evolution-cell-popup-previous-name">{evolutionTable[index-1][prevNodes].id}. {beautifyName(evolutionTable[index-1][prevNodes].name)}</span>
                                             <img className="pokedex-evolution-cell-popup-previous-sprite" src={evolutionTable[index-1][prevNodes].displaySprite} alt={evolutionTable[index-1][prevNodes].name}/>
                                           </p>
                                           {evolution_details.map((detail,index)=>(
