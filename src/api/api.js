@@ -1,5 +1,5 @@
 export const PokeFetch = url => {
-  return fetch(url, { mode: "no-cors" })
+  return fetch(url)
     .then(response => {
       return response.json();
     })
