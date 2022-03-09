@@ -1,6 +1,6 @@
 import { put, call} from 'redux-saga/effects';
 import { PokeFetch} from '../api/api';
-import { beautifyName, getPokemonDisplayImageFromName, getPokemonBaseSpriteFromURL, getIDfromURL,getURLFromPayload } from '../utils/stringOperation';
+import { beautifyName, getPokemonDisplayImageFromName, getPokemonBaseSpriteFromURL, getIDfromURL,getURLFromPayload, getPokemonAnimatedSpriteFromURL } from '../utils/stringOperation';
 import * as types from '../constants/ActionTypes';
 
 export function* fetchPokemonSaga({ payload }) {
@@ -17,6 +17,7 @@ export function* fetchPokemonSaga({ payload }) {
           url: pokemon.url,
           displayImage: getPokemonDisplayImageFromName(pokemon.name),
           displaySprite: getPokemonBaseSpriteFromURL(pokemon.url),
+          animatedSprite: getPokemonAnimatedSpriteFromURL(pokemon.url)
         }));
         pagination={
           previousUrl:null,
@@ -31,6 +32,7 @@ export function* fetchPokemonSaga({ payload }) {
           url: pokemon_species.url,
           displayImage: getPokemonDisplayImageFromName(pokemon_species.name),
           displaySprite: getPokemonBaseSpriteFromURL(pokemon_species.url),
+          animatedSprite: getPokemonAnimatedSpriteFromURL(pokemon_species.url)
         }));
         pagination={
           previousUrl:null,
@@ -46,6 +48,7 @@ export function* fetchPokemonSaga({ payload }) {
             url,
             displayImage: getPokemonDisplayImageFromName(name),
             displaySprite: getPokemonBaseSpriteFromURL(url),
+            animatedSprite: getPokemonAnimatedSpriteFromURL(url)
           }));
           pagination={
             previousUrl:response.previous,
@@ -75,6 +78,7 @@ export function* addPokemonSaga({ url }) {
         url,
         displayImage: getPokemonDisplayImageFromName(name),
         displaySprite: getPokemonBaseSpriteFromURL(url),
+        animatedSprite: getPokemonAnimatedSpriteFromURL(url)
       }));
       const pagination={
         previousUrl:response.previous,
@@ -195,6 +199,7 @@ function* getPokemonEvolutionChain(pokemon){
   var currentStage=[{...currentChain.species,
                         id:getIDfromURL(currentChain.species.url),
                         displaySprite:getPokemonBaseSpriteFromURL(currentChain.species.url),
+                        animatedSprite: getPokemonAnimatedSpriteFromURL(currentChain.species.url),
                         displayImage:getPokemonDisplayImageFromName(currentChain.species.name)}];
   evolutionTable.push(currentStage);
   var nextChain = currentChain.evolves_to;
@@ -207,6 +212,7 @@ function* getPokemonEvolutionChain(pokemon){
             currentStage.push({...currentChain[i].species,
                                   id:getIDfromURL(currentChain[i].species.url),
                                   displaySprite:getPokemonBaseSpriteFromURL(currentChain[i].species.url),
+                                  animatedSprite: getPokemonAnimatedSpriteFromURL(currentChain[i].species.url),
                                   displayImage:getPokemonDisplayImageFromName(currentChain[i].species.name),
                                   evolution_details: currentChain[i].evolution_details,
                                   prevNodes: currentChain[i].prevNodes ? currentChain[i].prevNodes : 0 ,

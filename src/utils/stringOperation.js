@@ -19,6 +19,12 @@ export const getPokemonBaseSpriteFromURL = (url)=>{
   return spriteUrl;
 }
 
+export const getPokemonAnimatedSpriteFromURL = (url)=>{
+  var spriteName = getIDfromURL(url)+".gif";
+  var spriteUrl= URL.POKEMON_ANIMATED_SPRITES_URL+spriteName;
+  return spriteUrl;
+}
+
 export const getURLFromPayload = ({ query, id, param })=>{
   var result = query+'/';
   if(id)

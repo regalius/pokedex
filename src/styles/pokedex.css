@@ -687,7 +687,17 @@
 .pokedex-list-thumbnail {
     position: relative;
     width: 100px;
+    box-sizing:border-box;
+    padding: 2%;
 }
+.pokedex-list-thumbnail .fallback{
+  display: block;
+  width: 200%;
+  left: -50%;
+  top: -25px;
+  position: relative;
+}
+
 .list .pokedex-list-thumbnail{
   float: left;
 }
@@ -812,6 +822,15 @@
     display: inline-block;
     vertical-align: middle;
     width: 30%;
+    box-sizing: border-box;
+    padding: 5%;
+}
+.pokedex-stats-sprites .fallback{
+    display: block;
+    width: 200%;
+    left: -50%;
+    top: -25px;
+    position: relative;
 }
 .pokedex-stats-wrapper {
     display: inline-block;

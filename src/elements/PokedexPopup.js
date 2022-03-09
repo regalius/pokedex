@@ -32,7 +32,7 @@ const PokedexPopup = ({ selectedPokemon, showPopup, loading, onHandleBackButton 
                         </div>
                       </h2>
                       {selectedPokemon.stats  &&
-                        <PokedexStats stats={selectedPokemon.stats} displaySprite={selectedPokemon.displaySprite}/>
+                        <PokedexStats stats={selectedPokemon.stats} animatedSprite={selectedPokemon.animatedSprite} displaySprite={selectedPokemon.displaySprite}/>
                       }
                       {selectedPokemon.species && selectedPokemon.species.description
                         ? <PokedexSpecies species={selectedPokemon.species} />
