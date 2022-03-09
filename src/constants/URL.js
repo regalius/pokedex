@@ -1,4 +1,4 @@
-export const POKE_API_ENDPOINT = "http://pokeapi.salestock.net/api/v2/";
+export const POKE_API_ENDPOINT = "https://pokeapi.co/api/v2/";
 export const POKEMON_IMAGE_URL = "https://img.pokemondb.net/artwork/";
 export const POKEMON_IMAGE_NODATA_URL =
     "https://img.pokemondb.net/artwork/bulbasaur.jpg";
